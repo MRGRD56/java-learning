@@ -1,5 +1,6 @@
-import com.mrgrd56.somePackage.math.second.*;
-import com.mrgrd56.somePackage.math.second.factory.*;
+import com.mrgrd56.somePackage.math.second.MathOperation;
+import com.mrgrd56.somePackage.math.second.factory.AdditionOperationFactory;
+import com.mrgrd56.somePackage.math.second.factory.MathOperationFactory;
 
 public class OopProgram {
     private static MathOperation createOperation(MathOperationFactory operationFactory) {
