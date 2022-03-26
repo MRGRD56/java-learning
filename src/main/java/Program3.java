@@ -13,15 +13,15 @@ public class Program3 {
         var okCode = HttpCode.OK.getMessage();
         System.out.println(okCode);
 
-        var eightBits = new EightBits();
-        eightBits.setBit1(false);
-        eightBits.setBit2(true);
-        eightBits.setBit3(false);
-        eightBits.setBit4(false);
-        eightBits.setBit5(true);
-        eightBits.setBit6(false);
-        eightBits.setBit7(true);
-        eightBits.setBit8(true);
-        System.out.println(Integer.toString(eightBits.getByteData(), 2));
+//        var eightBits = new EightBits();
+//        eightBits.setBit1(false);
+//        eightBits.setBit2(true);
+//        eightBits.setBit3(false);
+//        eightBits.setBit4(false);
+//        eightBits.setBit5(true);
+//        eightBits.setBit6(false);
+//        eightBits.setBit7(true);
+//        eightBits.setBit8(true);
+//        System.out.println(Integer.toString(eightBits.getByteData(), 2));
     }
 }

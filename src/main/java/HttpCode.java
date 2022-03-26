@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public enum HttpCode {
     OK(200) {
         @Override
@@ -31,5 +33,10 @@ public enum HttpCode {
         }
 
         return name().toLowerCase();
+    }
+
+    public static HttpCode get(int value) {
+        var optional = Arrays.stream(HttpCode.values()).filter(httpCode -> httpCode.code == value).findFirst();
+        return optional.orElse(null);
     }
 }
