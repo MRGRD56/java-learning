@@ -108,13 +108,22 @@ public class StackImpl<T> implements Iterable<T>, Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        return iteratee != null && iteratee.next != null;
+        if (iteratee == null) {
+            iteratee = top;
+        }
+
+        return iteratee.next != null;
     }
 
     @Override
     public T next() {
+        if (iteratee == null) {
+            iteratee = top;
+        }
+
+        var value = iteratee.value;
         iteratee = iteratee.next;
-        return iteratee.value;
+        return value;
     }
 
     private static class Node<T> {

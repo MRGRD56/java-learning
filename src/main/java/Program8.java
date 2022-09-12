@@ -36,5 +36,7 @@ public class Program8 {
         myStack.push("world");
         myStack.push("damn");
         myStack.pop();
+
+        myStack.forEach(System.out::println);
     }
 }
