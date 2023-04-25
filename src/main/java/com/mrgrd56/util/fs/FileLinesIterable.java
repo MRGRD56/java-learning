@@ -1,5 +1,6 @@
 package com.mrgrd56.util.fs;
 
+import com.google.common.collect.AbstractIterator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -37,14 +38,47 @@ public class FileLinesIterable implements Iterable<String>, AutoCloseable {
         }
     }
 
-    private static class FileLinesIterator implements Iterator<String>, AutoCloseable {
+    private static class FileLinesIterator extends AbstractIterator<String> implements AutoCloseable {
+
+        private boolean isClosed;
+        private final BufferedReader fileReader;
+
+        public FileLinesIterator(Path filePath) throws IOException {
+            fileReader = Files.newBufferedReader(filePath);
+        }
+
+        @Override
+        protected String computeNext() {
+            try {
+                String line = fileReader.readLine();
+                if (line == null) {
+                    close();
+                    return super.endOfData();
+                }
+
+                return line;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void close() throws Exception {
+            if (!isClosed) {
+                isClosed = true;
+                fileReader.close();
+            }
+        }
+    }
+
+    private static class FileLinesIterator1 implements Iterator<String>, AutoCloseable {
         private final BufferedReader fileReader;
 
         private String nextLine = null;
         private boolean hasNextLineReady = false;
         private boolean isClosed = false;
 
-        public FileLinesIterator(Path filePath) throws IOException {
+        public FileLinesIterator1(Path filePath) throws IOException {
             fileReader = Files.newBufferedReader(filePath);
         }
 
