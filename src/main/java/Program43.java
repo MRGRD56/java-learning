@@ -33,6 +33,7 @@ public class Program43 {
 
     private static Socket getSocket() throws IOException {
         return SSLSocketFactory.getDefault().createSocket("st.mrgrd56.ru", 443);
+//        return SocketFactory.getDefault().createSocket("st.mrgrd56.ru", 80);
     }
 
     @NotNull
@@ -42,6 +43,7 @@ public class Program43 {
         httpRequestWriter.println("GET /util/image.jpeg HTTP/1.1");
         httpRequestWriter.println("Host: st.mrgrd56.ru");
         httpRequestWriter.println("Connection: close");
+//        httpRequestWriter.println("X-Enforce-Protocol: HTTP");
         httpRequestWriter.println();
 
         httpRequestWriter.flush();
