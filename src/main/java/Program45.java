@@ -39,7 +39,7 @@ public class Program45 {
 
                 socketChannel.write(ByteBuffer.wrap(requestBuilder.toString().getBytes(StandardCharsets.UTF_8)));
 
-                ByteBuffer buffer = ByteBuffer.allocate(100);
+                ByteBuffer buffer = ByteBuffer.allocate(8 * 1024);
 
                 responseLoop:
                 while (socketChannel.read(buffer) != -1) {
