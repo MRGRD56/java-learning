@@ -7,17 +7,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class Program60 {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
-    private static final BlockingQueue<Integer> serverCreatedQueue = new ArrayBlockingQueue<>(1);
+    private static final BlockingQueue<Integer> serverCreatedQueue = new SynchronousQueue<>();
 
     public static void main(String[] args) {
         TaskInvoker<Void> taskInvoker = new TaskInvoker<>(executor);
@@ -53,7 +50,7 @@ public class Program60 {
 
         taskInvoker.submit(() -> {
             try (ServerSocket serverSocket = new ServerSocket(29105)) {
-                serverCreatedQueue.add(serverSocket.getLocalPort());
+                serverCreatedQueue.put(serverSocket.getLocalPort());
 
                 try (Socket socket = serverSocket.accept();
                      InputStream inputStream = new BufferedInputStream(socket.getInputStream());
