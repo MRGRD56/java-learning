@@ -11,18 +11,19 @@ import java.util.concurrent.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class Program60 {
-    private static final ExecutorService executor = Executors.newCachedThreadPool();
+public class Program60_1 {
+    private static final int SERVER_PORT = 29105;
 
-    private static final BlockingQueue<Integer> serverCreatedQueue = new SynchronousQueue<>();
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
+    private static final CountDownLatch serverCreatedLatch = new CountDownLatch(1);
 
     public static void main(String[] args) {
         TaskInvoker<Void> taskInvoker = new TaskInvoker<>(executor);
 
         taskInvoker.submit(() -> {
-            Integer serverPort = serverCreatedQueue.take();
+            serverCreatedLatch.await();
 
-            try (Socket socket = new Socket(InetAddress.getLoopbackAddress(), serverPort)) {
+            try (Socket socket = new Socket(InetAddress.getLoopbackAddress(), SERVER_PORT)) {
                 try (OutputStream outputStream = new BufferedOutputStream(socket.getOutputStream());
                      GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream);
                      ObjectOutputStream objectOutputStream = new ObjectOutputStream(gzipOutputStream)) {
@@ -51,8 +52,8 @@ public class Program60 {
         taskInvoker.submit(() -> {
             Thread.sleep(200);
 
-            try (ServerSocket serverSocket = new ServerSocket(29105)) {
-                serverCreatedQueue.put(serverSocket.getLocalPort());
+            try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
+                serverCreatedLatch.countDown();
 
                 try (Socket socket = serverSocket.accept();
                      InputStream inputStream = new BufferedInputStream(socket.getInputStream());

@@ -11,16 +11,16 @@ import java.util.concurrent.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class Program60 {
+public class Program60_2 {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
-    private static final BlockingQueue<Integer> serverCreatedQueue = new SynchronousQueue<>();
+    private static final Exchanger<Integer> serverCreatedExchanger = new Exchanger<>();
 
     public static void main(String[] args) {
         TaskInvoker<Void> taskInvoker = new TaskInvoker<>(executor);
 
         taskInvoker.submit(() -> {
-            Integer serverPort = serverCreatedQueue.take();
+            Integer serverPort = serverCreatedExchanger.exchange(null);
 
             try (Socket socket = new Socket(InetAddress.getLoopbackAddress(), serverPort)) {
                 try (OutputStream outputStream = new BufferedOutputStream(socket.getOutputStream());
@@ -52,7 +52,7 @@ public class Program60 {
             Thread.sleep(200);
 
             try (ServerSocket serverSocket = new ServerSocket(29105)) {
-                serverCreatedQueue.put(serverSocket.getLocalPort());
+                serverCreatedExchanger.exchange(serverSocket.getLocalPort());
 
                 try (Socket socket = serverSocket.accept();
                      InputStream inputStream = new BufferedInputStream(socket.getInputStream());
