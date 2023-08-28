@@ -12,10 +12,10 @@ public class Pool<T> {
         this.size = size;
         checkedOut = new boolean[size];
         available = new Semaphore(size, true);
-// Заполнение пула объектами :
+        // Заполнение пула объектами :
         for (int i = 0; i < size; ++i) {
             try {
-// Предполагается наличие конструктора по умолчанию:
+                // Предполагается наличие конструктора по умолчанию:
                 items.add(classObject.newInstance());
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -62,7 +62,7 @@ public class Pool<T> {
         private final int id = counter++;
 
         public Fat() {
-// Затратная, прервываемая операция:
+            // Затратная, прервываемая операция:
             for (int i = 1; i < 10000; i++) {
                 d += (Math.PI + Math.E) / (double) i;
             }
@@ -95,7 +95,7 @@ public class Pool<T> {
                 System.out.println(this + "checking in " + item);
                 pool.checkIn(item);
             } catch (InterruptedException e) {
-// Приемлемый способ завершения
+                // Приемлемый способ завершения
             }
         }
 
@@ -125,8 +125,8 @@ public class Pool<T> {
             Future<?> blocked = exec.submit(new Runnable() {
                 public void run() {
                     try {
-// Семафор предотвращает лишний вызов checkout.
-// поэтому следующий вызов блокируется:
+                        // Семафор предотвращает лишний вызов checkout.
+                        // поэтому следующий вызов блокируется:
                         pool.checkOut();
                     } catch (InterruptedException e) {
                         System.out.println("checkOut() Interrupted");
